@@ -11,8 +11,6 @@ class CentraletaController extends AbstractController
     #[Route('/centraleta', name: 'centraleta')]
     public function index(): Response
     {
-        return $this->render('centraleta/index.html.twig', [
-            'controller_name' => 'CentraletaController',
-        ]);
+        return $this->render('centraleta/index.html.twig', []);
     }
 }

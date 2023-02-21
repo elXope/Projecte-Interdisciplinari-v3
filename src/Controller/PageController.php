@@ -11,6 +11,6 @@ class PageController extends AbstractController
     #[Route('/', name: 'app_page')]
     public function index(): Response
     {
-        return $this->redirectToRoute("centraleta");
+        return $this->redirectToRoute("login");
     }
 }

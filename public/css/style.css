@@ -40,7 +40,7 @@ body{
 .calendari__nomDies {
     height: 3em;
     background: rgb(221,196,37);
-    background: linear-gradient(117deg, rgba(221,196,37,1) 0%, rgba(252,231,98,1) 48%, rgba(255,242,156,1) 100%);
+    /* background: linear-gradient(117deg, rgba(221,196,37,1) 0%, rgba(252,231,98,1) 48%, rgba(255,242,156,1) 100%); */
 }
 
 .calendari__setmana  {

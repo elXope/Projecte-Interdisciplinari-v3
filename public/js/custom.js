@@ -51,7 +51,7 @@ $(document).ready(function() {
                 } else {
                     $('.calendari__setmana:last-child').append(diaPlantilla({numDia : contadorDies}));
                     if(!canviMes && diaMes == contadorDies) {
-                        $('.calendari__setmana:last-child').children('.calendari__dia:last-child').children('span').addClass('actual');
+                        $('.calendari__setmana:last-child').children('.calendari__dia:last-child').children('p').addClass('actual');
                     }
                     contadorDies++;
                     if(canviMes) {
@@ -95,6 +95,6 @@ const setmanaPlantilla = () => `
 
 const diaPlantilla = ({numDia}) => `
     <div class="col calendari__dia">
-        <span>${numDia}</span>
+        <p class="calendari__diaInd">${numDia}</p>
     </div>
 `;

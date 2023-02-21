@@ -16,6 +16,7 @@ class TascaFormType extends AbstractType
             ->add('nom')
             ->add('descripcio')
             ->add('color')
+            ->add('timestamp', DateType::class)
             ->add('Guardar', SubmitType::class, array('label' => 'Guardar'))
         ;
     }

@@ -1,5 +1,10 @@
 $(document).ready(function() {
 
+    // Formulari tasca
+    $('#tancarModal').click(function() {
+        $('.principalFormTasca').hide();
+    });
+
     // Contingut noms dies
     (function() {
         $(window).resize(function() {
@@ -59,7 +64,8 @@ $(document).ready(function() {
                     }        
                 }
                 $('.calendari__setmana:last-child').children('.calendari__dia:last-child').click(function() {
-                    
+                    $(this).addClass('pulsado');
+                    $('.principalFormTasca').show();
                 });
                 if(contadorDies > nDiesMes) {
                     contadorDies = 1;

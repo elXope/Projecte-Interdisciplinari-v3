@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\{Request, Response};
+use Symfony\Component\HttpFoundation\{Request, Response, JsonResponse};
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\{User, Tasca};
@@ -23,7 +23,22 @@ class CentraletaController extends AbstractController
     {
         $tasca = new Tasca();
         $form = $this->createForm(TascaFormType::class, $tasca);
-        
+        $form->handleRequest($request);
+        if($form->isSubmitted()){
+            $tasca = $form->getData();
+            $tasca->setUser($this->getUser());
+            $tasca->setFet(false);
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($tasca);
+            $entityManager->flush();
+
+            $data = [
+                "nom" => $tasca->getNom(),
+                "color" => $tasca->getColor()
+            ];
+            return new JsonResponse($data, Response::HTTP_OK);
+        }
+
         return $this->render('partials/_principalTascaForm.html.twig', [
             'form' => $form->createView()
         ]);

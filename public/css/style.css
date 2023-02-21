@@ -64,6 +64,7 @@ body{
 
 .principalFormTasca {
     z-index: 1000;
+    display: none;
 }
 
 /* Caixa */

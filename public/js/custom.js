@@ -58,6 +58,9 @@ $(document).ready(function() {
                         $('.calendari__setmana:last-child').children('.calendari__dia:last-child').addClass('text-muted');
                     }        
                 }
+                $('.calendari__setmana:last-child').children('.calendari__dia:last-child').click(function() {
+                    
+                });
                 if(contadorDies > nDiesMes) {
                     contadorDies = 1;
                     canviMes = true;

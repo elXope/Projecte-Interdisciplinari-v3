@@ -1,9 +1,12 @@
 $(document).ready(function() {
 
     // Formulari tasca
-    $('#tancarModal').click(function() {
-        $('.principalFormTasca').hide();
-    });
+    (function() {
+        $('#tancarModal').click(function() {
+            $('.principalFormTasca').hide();
+        });
+    })();
+    
 
     // Contingut noms dies
     (function() {

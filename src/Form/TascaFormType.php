@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class TascaFormType extends AbstractType
 {
@@ -16,7 +17,9 @@ class TascaFormType extends AbstractType
             ->add('nom')
             ->add('descripcio')
             ->add('color')
-            ->add('timestamp', DateType::class)
+            ->add('timestamp', DateType::class, [
+                'widget' => 'single_text',
+                ])
             ->add('Guardar', SubmitType::class, array('label' => 'Guardar'))
         ;
     }

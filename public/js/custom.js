@@ -5,6 +5,15 @@ $(document).ready(function() {
         $('#tancarModal').click(function() {
             $('.principalFormTasca').hide();
         });
+        $('.formTasca').submit(function(evento) {
+            evento.preventDefault();
+            $.post('/centraleta/principalTasca', $(this).serialize()).done(function(data) {
+                $('.principalFormTasca').hide();
+                actualitzaDia(data);
+            }).fail(function(err) {
+                console.log("err");
+            });
+        });
     })();
     
 
@@ -50,19 +59,30 @@ $(document).ready(function() {
                 let nDiesMesAnterior = new Date(data.getFullYear(), mes, 0).getDate(); // fique mes perquè el contingut de mes és el index i per tant és un menos
                 if (i == 0 && dia1Mes != 0) {
                     if(j < dia1Mes) {
-                        $('.calendari__setmana:last-child').append(diaPlantilla({numDia : (nDiesMesAnterior - (dia1Mes - j - 1))}));
+                        $('.calendari__setmana:last-child').append(diaPlantilla({numDia : (nDiesMesAnterior - (dia1Mes - j - 1)), any : data.getFullYear(), mes: mes, dia: (nDiesMesAnterior - (dia1Mes - j - 1))}));
                         $('.calendari__dia:last-child').addClass('text-muted');
+                        actualitzaDia(`${data.getFullYear()}-${mes}-${nDiesMesAnterior - (dia1Mes - j - 1)}`);
                     } else {
-                        $('.calendari__setmana:last-child').append(diaPlantilla({numDia : contadorDies}));
+                        let dia = '';
+                        contadorDies < 10 ? dia += '0' + contadorDies : dia += contadorDies;
+                        $('.calendari__setmana:last-child').append(diaPlantilla({numDia : contadorDies, any : data.getFullYear(), mes: mes + 1, dia: dia}));
                         contadorDies++;
+                        // actualitzaDia(`${data.getFullYear()}-${mes + 1}-${}`);
                     }
                 } else {
-                    $('.calendari__setmana:last-child').append(diaPlantilla({numDia : contadorDies}));
-                    if(!canviMes && diaMes == contadorDies) {
-                        $('.calendari__setmana:last-child').children('.calendari__dia:last-child').children('p').addClass('actual');
+                    if(!canviMes){
+                        let dia = '';
+                        contadorDies < 10 ? dia += '0' + contadorDies : dia += contadorDies;
+                        $('.calendari__setmana:last-child').append(diaPlantilla({numDia : contadorDies, any : data.getFullYear(), mes: mes + 1, dia: dia}));
+                        if(diaMes == contadorDies) {                        
+                            $('.calendari__setmana:last-child').children('.calendari__dia:last-child').children('p').addClass('actual');
+                        }
                     }
                     contadorDies++;
                     if(canviMes) {
+                        let dia = '';
+                        contadorDies < 10 ? dia += '0' + contadorDies : dia += contadorDies;
+                        $('.calendari__setmana:last-child').append(diaPlantilla({numDia : contadorDies, any : data.getFullYear(), mes: mes + 2, dia: dia}));
                         $('.calendari__setmana:last-child').children('.calendari__dia:last-child').addClass('text-muted');
                     }        
                 }
@@ -100,13 +120,30 @@ $(document).ready(function() {
 
 });
 
+function actualitzaDia(data) {
+    $.getJSON(`/centraleta/tasquesDia/${data.any + "-" + data.mes + "-" + data.dia}`).done(function(tasques) {
+        let hui = new Date();
+        $.each(tasques, function(i, tasca) {
+            $(`.calendari__dia[data-id=${data.any + "-" + data.mes + "-" + data.dia}]`).children('.calendari__llistaTasques').append(tascaPlantilla({nom : tasca.nom}));
+        });
+    }).fail(function(err) {
+        console.log(err);
+    });
+}
+
 const setmanaPlantilla = () => `
 <div class="calendari__setmana row ms-0 me-0">
 </div>
 `;
 
-const diaPlantilla = ({numDia}) => `
-    <div class="col calendari__dia">
+const diaPlantilla = ({numDia, any, mes, dia}) => `
+    <div class="col calendari__dia" data-id="${any}-${mes}-${dia}">
         <p class="calendari__diaInd">${numDia}</p>
+        <ul class="list-unstyled calendari__llistaTasques">
+        </ul>
     </div>
+`;
+
+const tascaPlantilla = ({nom}) => `
+<li class="calendari__tasca rounded mb-1 ps-1 pe-1 text-truncate">${nom}</li>
 `;

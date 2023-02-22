@@ -39,6 +39,20 @@ class TascaRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+    * @return Tasca[] Returns an array of Tasca objects
+    */
+   public function findByDate($value): array
+   {
+       return $this->createQueryBuilder('t')
+           ->andWhere('t.timestamp = :val')
+           ->setParameter('val', $value)
+           ->orderBy('t.id', 'ASC')
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
 //    /**
 //     * @return Tasca[] Returns an array of Tasca objects
 //     */

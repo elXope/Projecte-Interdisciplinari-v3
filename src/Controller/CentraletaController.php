@@ -31,16 +31,29 @@ class CentraletaController extends AbstractController
             $entityManager = $doctrine->getManager();
             $entityManager->persist($tasca);
             $entityManager->flush();
-
-            $data = [
-                "nom" => $tasca->getNom(),
-                "color" => $tasca->getColor()
-            ];
-            return new JsonResponse($data, Response::HTTP_OK);
+            return new JsonResponse(["dia" => $tasca->getTimestamp()->format('d'), "mes" => $tasca->getTimestamp()->format('m'), "any" => $tasca->getTimestamp()->format('Y')] , Response::HTTP_OK);
         }
 
         return $this->render('partials/_principalTascaForm.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    #[Route('/centraleta/tasquesDia/{timestamp}', name:'tasquesDia')]
+    public function tasquesDia(ManagerRegistry $doctrine, Request $request, $timestamp): JsonResponse
+    {
+        $repository = $doctrine->getRepository(Tasca::class);
+        $tasques = $repository->findByDate($timestamp);
+        $items = [];
+        foreach($tasques as $tasca){
+            $item = [
+                "nom" => $tasca->getNom(),
+                "descripcio" => $tasca->getDescripcio(),
+                "fet" => $tasca->isFet()
+            ];
+            $items[] = $item;
+        }
+
+        return new JsonResponse($items, Response::HTTP_OK);
     }
 }

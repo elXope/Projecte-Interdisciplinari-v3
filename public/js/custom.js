@@ -108,7 +108,7 @@ $(document).ready(function() {
             if($(this).prop('checked')) {
                 $(this).parent().addClass('text-muted');
                 $(this).siblings().addClass('text-decoration-line-through');
-                $('.llibreta').append($(this).parent());
+                $('.llista').append($(this).parent());
             } else {
                 $(this).parent().removeClass('text-muted');
                 $(this).siblings().removeClass('text-decoration-line-through');

@@ -84,6 +84,12 @@ body{
     display: none;
 }
 
+/* Llista tasques */
+
+.llista {
+    color: antiquewhite;
+}
+
 /* Caixa */
 .caixa {
     backdrop-filter: blur(.3rem);

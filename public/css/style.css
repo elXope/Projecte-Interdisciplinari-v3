@@ -64,6 +64,21 @@ body{
     color:antiquewhite;
 }
 
+.calendari__tasca--blue {
+    background-color: blue;
+    color:antiquewhite;
+}
+
+.calendari__tasca--green {
+    background-color: green;
+    color:antiquewhite;
+}
+
+.calendari__tasca--red {
+    background-color: red;
+    color:antiquewhite;
+}
+
 .principalFormTasca {
     z-index: 1000;
     display: none;

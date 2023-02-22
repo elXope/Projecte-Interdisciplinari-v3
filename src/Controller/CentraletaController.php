@@ -43,17 +43,17 @@ class CentraletaController extends AbstractController
     public function tasquesDia(ManagerRegistry $doctrine, Request $request, $timestamp): JsonResponse
     {
         $repository = $doctrine->getRepository(Tasca::class);
-        $tasques = $repository->findByDate($timestamp);
+        $tasques = $repository->findByDate($timestamp, $this->getUser());
         $items = [];
         foreach($tasques as $tasca){
             $item = [
                 "nom" => $tasca->getNom(),
+                "color" => $tasca->getColor(),
                 "descripcio" => $tasca->getDescripcio(),
                 "fet" => $tasca->isFet()
             ];
             $items[] = $item;
         }
-
         return new JsonResponse($items, Response::HTTP_OK);
     }
 }

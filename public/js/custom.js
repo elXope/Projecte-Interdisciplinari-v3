@@ -1,21 +1,4 @@
-$(document).ready(function() {
-
-    // Formulari tasca
-    (function() {
-        $('#tancarModal').click(function() {
-            $('.principalFormTasca').hide();
-        });
-        $('.formTasca').submit(function(evento) {
-            evento.preventDefault();
-            $.post('/centraleta/principalTasca', $(this).serialize()).done(function(data) {
-                $('.principalFormTasca').hide();
-                actualitzaDia(data);
-            }).fail(function(err) {
-                console.log("err");
-            });
-        });
-    })();
-    
+$(document).ready(function() {    
 
     // Contingut noms dies
     (function() {
@@ -67,7 +50,7 @@ $(document).ready(function() {
                         contadorDies < 10 ? dia += '0' + contadorDies : dia += contadorDies;
                         $('.calendari__setmana:last-child').append(diaPlantilla({numDia : contadorDies, any : data.getFullYear(), mes: mes + 1, dia: dia}));
                         contadorDies++;
-                        // actualitzaDia(`${data.getFullYear()}-${mes + 1}-${}`);
+                        actualitzaDia(`${data.getFullYear()}-${mes + 1}-${dia}`);
                     }
                 } else {
                     if(!canviMes){
@@ -77,6 +60,7 @@ $(document).ready(function() {
                         if(diaMes == contadorDies) {                        
                             $('.calendari__setmana:last-child').children('.calendari__dia:last-child').children('p').addClass('actual');
                         }
+                        actualitzaDia(`${data.getFullYear()}-${mes + 1}-${dia}`);
                     }
                     contadorDies++;
                     if(canviMes) {
@@ -84,6 +68,7 @@ $(document).ready(function() {
                         contadorDies < 10 ? dia += '0' + contadorDies : dia += contadorDies;
                         $('.calendari__setmana:last-child').append(diaPlantilla({numDia : contadorDies, any : data.getFullYear(), mes: mes + 2, dia: dia}));
                         $('.calendari__setmana:last-child').children('.calendari__dia:last-child').addClass('text-muted');
+                        actualitzaDia(`${data.getFullYear()}-${mes + 2}-${contadorDies}`);
                     }        
                 }
                 $('.calendari__setmana:last-child').children('.calendari__dia:last-child').click(function() {
@@ -91,16 +76,30 @@ $(document).ready(function() {
                     $('.principalFormTasca').show();
                 });
                 if(contadorDies > nDiesMes) {
-                    contadorDies = 1;
+                    contadorDies = 0;
                     canviMes = true;
                 }
-
-                // actualitzar amb el .get les tasques del dia
-                // $.get(ruta).done(function() {
-                //  $('.calendari__setmana:last-child').children('.calendari__dia:last-child').append(tasquesDiaPlantilla({tasques : data}));
-                // })
             }
         }
+    })();
+
+    // Formulari tasca
+    (function() {
+        $('#tancarModal').click(function(evento) {
+            evento.preventDefault();
+            $('.principalFormTasca').hide();
+        });
+        $('.formTasca').submit(function(evento) {
+            evento.preventDefault();
+            $.post('/centraleta/principalTasca', $(this).serialize()).done(function(data) {
+                $('.principalFormTasca').hide();
+                let args = data.any + "-" + data.mes[1] + "-" + data.dia;
+                console.log(args);
+                actualitzaDia(args);
+            }).fail(function(err) {
+                console.log("err");
+            });
+        });
     })();
 
     // Llibreta tatxar
@@ -121,10 +120,9 @@ $(document).ready(function() {
 });
 
 function actualitzaDia(data) {
-    $.getJSON(`/centraleta/tasquesDia/${data.any + "-" + data.mes + "-" + data.dia}`).done(function(tasques) {
-        let hui = new Date();
-        $.each(tasques, function(i, tasca) {
-            $(`.calendari__dia[data-id=${data.any + "-" + data.mes + "-" + data.dia}]`).children('.calendari__llistaTasques').append(tascaPlantilla({nom : tasca.nom}));
+    $.getJSON(`/centraleta/tasquesDia/${data}`).done(function(tasques) {
+        $.each(tasques, function(i, tasca) {     
+            $(`.calendari__dia[data-id=${data}]`).children('.calendari__llistaTasques').append(tascaPlantilla({nom : tasca.nom}));
         });
     }).fail(function(err) {
         console.log(err);

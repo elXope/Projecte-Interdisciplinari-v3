@@ -121,6 +121,7 @@ $(document).ready(function() {
 
 function actualitzaDia(data) {
     $.getJSON(`/centraleta/tasquesDia/${data}`).done(function(tasques) {
+        $(`.calendari__dia[data-id=${data}]`).children('.calendari__llistaTasques').html('');
         $.each(tasques, function(i, tasca) {     
             $(`.calendari__dia[data-id=${data}]`).children('.calendari__llistaTasques').append(tascaPlantilla({nom : tasca.nom}));
         });
